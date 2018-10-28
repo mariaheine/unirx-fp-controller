@@ -11,8 +11,8 @@ public class UserMovementInput : MonoBehaviour {
     public static UserMovementInput Instance { get; private set; }
     public IObservable<Vector2> Movement { get; private set; }
     public IObservable<Vector2> Mouselook { get; private set; }
-    //reactive property, just like normal property but can be observed!
     public ReadOnlyReactiveProperty<bool> Run { get; private set; }
+    public IObservable<bool> Jump { get; private set; }
 
     private void Awake()
     {
@@ -38,10 +38,12 @@ public class UserMovementInput : MonoBehaviour {
                 return new Vector2(x, y);
             });
 
-        // Run on shift
         Run = this.UpdateAsObservable()
             .Select(_ => Input.GetButton("Fire3"))
             .ToReadOnlyReactiveProperty();
+
+        Jump = this.UpdateAsObservable()
+            .Select(_ => Input.GetButton("Jump"));
     }
 
 }
